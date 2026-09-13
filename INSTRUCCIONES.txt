@@ -1,0 +1,191 @@
+=====================================================================
+ INSTRUCCIONES DEL PROYECTO
+ Comparación de algoritmos clásicos vs. cuánticos simulados en Qiskit
+=====================================================================
+
+Todo esto se corre desde tu carpeta del proyecto:
+    cd ~/Downloads/U/Seminario/
+
+Recuerda usar SIEMPRE el Python del entorno virtual (venv/bin/python),
+nunca "python" a secas.
+
+
+---------------------------------------------------------------------
+1) EJECUTAR LOS 4 ALGORITMOS (CPU y GPU)
+---------------------------------------------------------------------
+
+Cada script corre la versión clásica y la cuántica, variando el tamaño
+del problema, y guarda los resultados en la carpeta csv/ (se crea sola
+la primera vez que corres cualquiera de los scripts).
+
+--- Grover (búsqueda lineal vs. Grover) ---
+venv/bin/python grover.py --min-qubits 2 --max-qubits 22 --device GPU --salida grover_gpu.csv
+venv/bin/python grover.py --min-qubits 2 --max-qubits 22 --device CPU --salida grover_cpu.csv
+
+--- Deutsch-Jozsa (fuerza bruta vs. Deutsch-Jozsa) ---
+venv/bin/python deutsch_jozsa.py --min-bits 2 --max-bits 22 --device GPU --salida dj_gpu.csv
+venv/bin/python deutsch_jozsa.py --min-bits 2 --max-bits 22 --device CPU --salida dj_cpu.csv
+
+--- QFT (FFT clásica vs. Transformada Cuántica de Fourier) ---
+venv/bin/python qft.py --min-qubits 2 --max-qubits 20 --device GPU --salida qft_gpu.csv
+venv/bin/python qft.py --min-qubits 2 --max-qubits 20 --device CPU --salida qft_cpu.csv
+
+--- Shor (división de prueba vs. Shor sobre N=15) ---
+venv/bin/python shor.py --min-count-qubits 3 --max-count-qubits 12 --device GPU --salida shor_gpu.csv
+venv/bin/python shor.py --min-count-qubits 3 --max-count-qubits 12 --device CPU --salida shor_cpu.csv
+
+Al terminar, deberías tener 8 archivos dentro de csv/:
+    csv/grover_cpu.csv   csv/grover_gpu.csv
+    csv/dj_cpu.csv       csv/dj_gpu.csv
+    csv/qft_cpu.csv      csv/qft_gpu.csv
+    csv/shor_cpu.csv     csv/shor_gpu.csv
+
+Nota: si algún algoritmo tarda demasiado o se queda sin memoria en tu
+equipo, baja el número de --max-qubits / --max-bits / --max-count-qubits
+y vuelve a correrlo.
+
+
+---------------------------------------------------------------------
+2) GENERAR LAS GRÁFICAS AUTOMÁTICAMENTE
+---------------------------------------------------------------------
+
+Si no tienes matplotlib instalado todavía:
+    uv pip install --python venv/bin/python matplotlib
+
+Luego, con los 8 CSV ya generados en csv/:
+    venv/bin/python graficar_resultados.py
+
+Esto crea una carpeta graficas/ con 11 imágenes PNG (tiempo, RAM y uso
+de GPU para cada algoritmo, más las dos gráficas de Shor).
+
+
+---------------------------------------------------------------------
+3) (OPCIONAL) VERIFICAR QUE LA GPU REALMENTE SE USÓ
+---------------------------------------------------------------------
+
+En una terminal aparte, mientras corres cualquier script con --device GPU:
+    nvidia-smi dmon -s u
+
+La columna "sm" debe subir cuando el circuito ya es grande (a partir de
+~13-18 qubits, según el algoritmo). Esto confirma que es la RTX 3050 la
+que trabajó, no la gráfica integrada (nvidia-smi solo puede ver
+hardware NVIDIA, así que no hay ambigüedad posible).
+
+
+=====================================================================
+ CÓMO SUBIR EL PROYECTO A GITHUB
+=====================================================================
+
+Ya creaste el repositorio vacío en GitHub:
+    https://github.com/darkavenger0528/Comparacion_Algoritmos_Cuanticos
+
+Ahora vamos a conectar tu carpeta local con ese repositorio. Todos los
+comandos siguientes se corren desde ~/Downloads/U/Seminario/ (tu shell
+es fish, pero estos comandos de git funcionan igual en cualquier shell).
+
+
+--- Paso 1: Verificar que tienes git instalado ---
+    git --version
+
+Si no lo tienes:
+    sudo pacman -S git
+
+
+--- Paso 2: Configurar tu identidad en git (solo la primera vez que usas git en esta máquina) ---
+    git config --global user.name "Justin Thomas Moreno Solano"
+    git config --global user.email "tu_correo_de_github@ejemplo.com"
+
+(usa el mismo correo con el que te registraste en GitHub, o el que
+tengas configurado como público en tu cuenta)
+
+
+--- Paso 3: Crear un .gitignore (para no subir cosas que no deben ir al repo) ---
+Esto evita subir el entorno virtual (pesa mucho y es específico de tu
+máquina) y los archivos temporales de Python:
+
+    echo "venv/" > .gitignore
+    echo "__pycache__/" >> .gitignore
+    echo "*.pyc" >> .gitignore
+    echo ".DS_Store" >> .gitignore
+
+Verifica que quedó bien:
+    cat .gitignore
+
+
+--- Paso 4: Inicializar el repositorio local ---
+    git init
+    git branch -M main
+
+
+--- Paso 5: Agregar todos los archivos del proyecto (excepto los del .gitignore) ---
+    git add .
+
+Puedes revisar qué se va a subir antes de confirmar:
+    git status
+
+Deberías ver en verde: los .py, README.md, requirements.txt, la
+carpeta csv/, la carpeta graficas/ y la carpeta DOCS/ (con tu
+Borrador.docx y el documento de errores de instalación). NO deberías
+ver venv/ ni __pycache__/ listados (si aparecen, revisa que el
+.gitignore se haya creado correctamente en el paso 3).
+
+
+--- Paso 6: Hacer el primer commit ---
+    git commit -m "Primera version: 4 algoritmos, resultados CPU/GPU, graficas y documentacion"
+
+
+--- Paso 7: Conectar tu carpeta local con el repositorio de GitHub ---
+    git remote add origin https://github.com/darkavenger0528/Comparacion_Algoritmos_Cuanticos.git
+
+
+--- Paso 8: Subir todo a GitHub ---
+    git push -u origin main
+
+Es posible que te pida autenticarte. GitHub ya no acepta tu contraseña
+normal por HTTPS: si te la pide y falla, necesitas un "Personal Access
+Token" (se genera en GitHub: Settings -> Developer settings -> Personal
+access tokens -> Generate new token) y lo usas en vez de la contraseña
+cuando git te la pida. Alternativamente, puedes usar SSH en vez de
+HTTPS (hay un botón "SSH" junto a "HTTPS" en la página de tu
+repositorio, en la sección "Quick setup").
+
+
+--- Para futuras actualizaciones (después de correr más experimentos, editar el paper, etc.) ---
+Cada vez que quieras subir cambios nuevos, solo repites estos 3 pasos:
+
+    git add .
+    git commit -m "Descripcion breve de lo que cambiaste"
+    git push
+
+
+=====================================================================
+ ESTRUCTURA FINAL ESPERADA DEL REPOSITORIO
+=====================================================================
+
+Comparacion_Algoritmos_Cuanticos/
+├── README.md
+├── requirements.txt
+├── resource_monitor.py
+├── grover.py
+├── deutsch_jozsa.py
+├── qft.py
+├── shor.py
+├── graficar_resultados.py
+├── .gitignore
+├── csv/
+│   ├── grover_cpu.csv
+│   ├── grover_gpu.csv
+│   ├── dj_cpu.csv
+│   ├── dj_gpu.csv
+│   ├── qft_cpu.csv
+│   ├── qft_gpu.csv
+│   ├── shor_cpu.csv
+│   └── shor_gpu.csv
+├── graficas/
+│   └── (11 archivos .png)
+└── DOCS/
+    ├── Borrador.docx
+    └── (documento de errores de instalación)
+
+(venv/ y __pycache__/ NO aparecen porque quedan excluidos por el
+.gitignore — eso es correcto y esperado)

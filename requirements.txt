@@ -1,0 +1,9 @@
+# Versiones fijadas por compatibilidad (ver bitácora de instalación del proyecto).
+# qiskit-aer-gpu 0.15.1 no es compatible con Qiskit >= 2.0, por eso se fija en 1.4.5.
+qiskit==1.4.5
+qiskit-aer-gpu==0.15.1
+psutil>=5
+nvidia-ml-py   # reemplazo oficial del deprecado "pynvml"; se importa igual (import pynvml)
+numpy
+sympy
+matplotlib     # para graficar_resultados.py
