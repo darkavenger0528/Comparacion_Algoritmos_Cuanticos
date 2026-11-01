@@ -1,0 +1,13 @@
+algoritmo,lado,dispositivo,k_max_exitoso_en_todas_las_reps,primer_fallo_k,motivo_primer_fallo
+dj,clasico,CPU,27,28,TIMEOUT: Cortado por el vigilante (límite 600s / 13352 MB)
+dj,cuantico,CPU,32,,sin fallos
+dj,cuantico,GPU,32,,sin fallos
+grover,clasico,CPU,28,29,MEMORIA_EXCEDIDA: Cortado por el vigilante (límite 600s / 13352 MB)
+grover,cuantico,CPU,23,1,"ERROR: qiskit.circuit.exceptions.CircuitError: 'The number of control qubits must be in `[1, num_qubits - base_gate.num_qubits]`.'"
+grover,cuantico,GPU,24,1,"ERROR: qiskit.circuit.exceptions.CircuitError: 'The number of control qubits must be in `[1, num_qubits - base_gate.num_qubits]`.'"
+qft,clasico,CPU,27,28,MEMORIA_EXCEDIDA: Cortado por el vigilante (límite 600s / 13352 MB)
+qft,cuantico,CPU,29,30,ERROR: qiskit.transpiler.exceptions.CircuitTooWideForTarget: 'Number of qubits (30) in circuit-168 is greater than maximum (29) in the coupling_map'
+qft,cuantico,GPU,28,29,"ERROR: qiskit.exceptions.QiskitError: 'ERROR:  [Experiment 0] std::bad_alloc ,  ERROR: std::bad_alloc'"
+shor,clasico,CPU,32,,sin fallos
+shor,cuantico,CPU,25,26,ERROR: qiskit.transpiler.exceptions.CircuitTooWideForTarget: 'Number of qubits (30) in circuit-190 is greater than maximum (29) in the coupling_map'
+shor,cuantico,GPU,24,25,"ERROR: qiskit.exceptions.QiskitError: 'ERROR:  [Experiment 0] std::bad_alloc ,  ERROR: std::bad_alloc'"

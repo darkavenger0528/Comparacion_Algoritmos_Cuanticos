@@ -1,0 +1,14 @@
+=== 1) Método que usa Aer en Deutsch-Jozsa ===
+Dispositivos disponibles en Aer: ('CPU', 'GPU')
+  Pedido: CPU | method = stabilizer | device = CPU
+  Pedido: GPU | method = stabilizer | device = GPU
+  Forzando statevector: method = statevector
+
+=== 2) Exceso de RAM de Grover durante run() de Aer (CPU) ===
+  n  iteraciones  instrucciones  RAM antes (MB)  pico (MB)  exceso (MB)  16*2^n (MB)   t (s)
+ 17          284          30138             419        467           49            2     0.9
+ 18          402          45060             441        495           55            4     2.2
+ 19          568          67062             445        540           95            8     6.0
+
+Si 'exceso' sube con las instrucciones y es mucho mayor que 16*2^n, el exceso
+depende del largo del circuito y no del vector de estado.

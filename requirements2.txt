@@ -1,0 +1,13 @@
+# Versiones fijadas por compatibilidad (ver bitácora de instalación del proyecto).
+# qiskit-aer-gpu 0.15.1 no es compatible con Qiskit >= 2.0, por eso se fija en 1.4.5.
+# qiskit-ibm-runtime >= 0.46 tambien exige Qiskit >= 2.0, por eso se fija en 0.40.1.
+# Instala siempre qiskit y qiskit-ibm-runtime EN EL MISMO COMANDO para que pip/uv
+# no decida subir qiskit por su cuenta como dependencia.
+qiskit==1.4.5
+qiskit-aer-gpu==0.15.1
+qiskit-ibm-runtime==0.40.1
+psutil>=5
+nvidia-ml-py   # reemplazo oficial del deprecado "pynvml"; se importa igual (import pynvml)
+numpy
+sympy
+matplotlib     # para graficar_resultados.py
